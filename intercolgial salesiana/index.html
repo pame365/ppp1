@@ -1,0 +1,897 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plataforma comunitaria para difundir información verificada sobre personas desaparecidas y brindar orientación a sus familias.">
+  <title>Nexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="NEXO, inicio">
+      <img class="brand-logo" src="img/nexo.png"  alt="Logo de NEXO">
+      <span>NE<span class="brand-accent">XO</span>
+      <small>RED DE APOYO</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">☰</button>
+    <nav class="main-nav" id="mainNav" aria-label="Menú principal">
+      <a class="nav-link active" href="#inicio" data-page="inicio">Inicio</a>
+      <a class="nav-link" href="#nosotros" data-page="nosotros">Nosotros</a>
+      <a class="nav-link" href="#servicios" data-page="servicios">Servicios</a>
+     <a class="nav-link" href="#casos-publicados" data-page="casos-publicados">Casos</a>
+      <a class="nav-link" href="#foro" data-page="foro">Foro</a>
+      <a class="nav-link" href="#contactos" data-page="contactos">Contactos ↗</a>
+      <a class="nav-cta" href="#proceso" data-page="proceso">Reportar un caso</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <!-- INICIO -->
+    <section class="page active" id="page-inicio" data-panel="inicio">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">EMPATIA - RESPETO - ACOMPAÑAMIENTO </span>
+          <h1>Estamos para<br><span>Apoyarte.</span></h1>
+          <p>Esta organizacion tiene la finalidad de compartir informacion para poder ayudarte</p>
+          <div class="hero-actions">
+            <a class="button button-light" href="#casos">Casos publicados <span>↓</span></a>
+            <a class="button button-outline" href="#proceso" data-page="proceso">Iniciar publicacion <span>↗</span></a>
+          </div>
+          <div class="hero-note"><span class="note-icon">i</span>Esto NO es una pagina oficial, solo ayudamos a difunfir imformacion de manera responsable. <p>EN CASO DE REPORTAR UN DESAPARECIMIENTO, PRIMERO DEBE SER DENUNCIDO A LAS AUTORIDADES CORRESPONDIENTES</p></div>
+        </div>
+       
+<div class="hero-carousel" aria-label="Galería de NEXO">
+  <div class="hero-slides">
+    <img src="img/carrusel 1.jfif" alt="Acompañamiento a las familias" class="hero-slide active">
+    <img src="img/carrusel 2.jfif" alt="Personas unidas en la búsqueda" class="hero-slide">
+    <img src="img/crrusel3.jfif" alt="Esperanza y solidaridad" class="hero-slide">
+    <img src="img/carrusel4.jfif" alt="Apoyo a las familias" class="hero-slide">
+    <img src="img/carrusel5.png" alt="Una comunidad que acompaña" class="hero-slide">
+  </div>
+
+  <button class="carousel-btn prev" type="button" aria-label="Imagen anterior">&#10094;</button>
+  <button class="carousel-btn next" type="button" aria-label="Imagen siguiente">&#10095;</button>
+
+  <div class="carousel-dots" aria-label="Elegir imagen">
+    <button class="carousel-dot active" aria-label="Imagen 1" type="button"></button>
+    <button class="carousel-dot" aria-label="Imagen 2" type="button"></button>
+    <button class="carousel-dot" aria-label="Imagen 3" type="button"></button>
+    <button class="carousel-dot" aria-label="Imagen 4" type="button"></button>
+    <button class="carousel-dot" aria-label="Imagen 5" type="button"></button>
+  </div>
+
+  <div class="hero-caption">
+<img
+  src="img/logo.jpeg"
+  alt="Logo NEXO"
+  style="width: 45px !important; height: 45px !important; padding: 0 
+  !important; object-fit: cover; border-radius: 50%; flex-shrink: 0; 
+  margin-left: -8px;"
+>
+    <span>
+      <strong>Estamos juntos
+      <small>Comparte nuestra pagina</small></strong>
+    </span>
+  </div>
+
+  <div class="floating-tag">te apoyamos</div>
+</div>
+
+      </section>
+
+      <section class="section cases-section" id="casos">
+        <div class="section-heading">
+          <div><span class="eyebrow dark-eyebrow">CASOS RECIENTES</span>
+            <h2>Buscar persona</h2><p>Los casos que aparezen aquí fueron compartidos de manera voluntaria y 
+              primero se realizo los respectivos procesos legales.</p>
+            </div>
+
+         
+</div>
+        <div class="case-grid" id="caseGrid">
+
+          <article class="case-card placeholder-case" 
+          data-name="caso de ejemplo 1">
+            <div class="case-photo photo-one">
+             <img src="img/MUJER.png" alt=""></div>
+            <div class="case-body">
+              <span class="case-status">Caso.</span>
+              <h3>Maria Antonia Lopez Zambrano</h3>
+              <p><span>⌖</span> Guayaquil / Guayas</p><p>Edad: 28</p>
+              <p class="case-desc">La ultima vez que fue vista, tenia unos pantalones 
+                blancos y unna blusa rosada sin mangas. 
+                En el sector de la alborada etp 11va.</p>
+                <a
+                    class="text-button demo-detail"
+                    href="https://wa.me/59393080360"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    ¿La has visto? - COMUNÍCATE CON NOSOTROS <span>↗</span>
+                   </a>
+          </article>
+
+          <article class="case-card placeholder-case" 
+          data-name="caso de ejemplo 2">
+            <div class="case-photo photo-two">
+             <img src="img/hombre1.png" alt=""></div>
+            <div class="case-body">
+              <span class="case-status">Caso.</span>
+              <h3>Andres Luis Pilar Vera</h3><p>
+                <span>⌖</span> Daule / Guayas</p><p>
+                  Edad: 34
+                </p>
+                <p class="case-desc">La ultima vez que fue visto llevaba una camiseta
+                  polo roja, unos jeans de mesclila y zapatos deportivos blancos. 
+                  En el sector de la aurora, la joya</p>
+                      <a
+                    class="text-button demo-detail"
+                    href="https://wa.me/59393080360"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    ¿Lo has visto? - COMUNÍCATE CON NOSOTROS <span>↗</span>
+                   </a></div>
+                
+                   </article>
+
+          <article class="case-card placeholder-case" 
+          data-name="caso de ejemplo 3">
+            <div class="case-photo photo-three">
+              <img src="img/images.png" alt=""></div>
+            <div class="case-body">
+              <span class="case-status">Caso.</span>
+              <h3>Jhon cristofer Palma Ruiz</h3><p>
+                <span>⌖</span> Guayaquil / Guayas</p><p>Edad: 21</p>
+                <p class="case-desc">La ultima vez que lo vieron llevaba una camisa 
+                  azul con una corbata roja y un pantalon de vestir negro. 
+                  En el sector de la juan montalvo.</p>
+                <a
+                    class="text-button demo-detail"
+                    href="https://wa.me/59393080360"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    ¿Lo has visto? - COMUNÍCATE CON NOSOTROS <span>↗</span>
+                   </a></div> 
+        </div>
+      </section>
+
+      <section class="impact-band">
+        <div><span class="eyebrow">Una red de apoyo segura</span>
+          <h2>Pequeñas acciones<br>pueden hacer la diferencia.</h2></div>
+        <a class="button button-dark" href="#nosotros" 
+        data-page="nosotros">Conoce de nosotros <span>↗</span></a>
+      </section>
+    </section>
+
+    <!-- NOSOTROS: se abre como panel independiente en la misma ventana -->
+    <section class="page inner-page" id="page-nosotros" data-panel="nosotros">
+      <div class="inner-hero"><span class="eyebrow dark-eyebrow">QUIÉNES SOMOS</span>
+        <h1>Nos une mas<br><span>que un apellido.</span>
+        </h1><p>Somos una organizacion que busca difundir información de 
+          manera responsable y brindar acompañamiento para 
+          personas y familias afectadas por una desaparición.</p></div>
+      <div class="values-grid">
+        <article class="value-card"><span>01</span>
+          <h3>Empatia</h3>
+          <p>Comprendemos tu dolor por eso nuestro objetivo es poder 
+            difundir la imformacion necesaria.
+          </p></article>
+        <article class="value-card"><span>02</span>
+          <h3>Respeto</h3>
+          <p>Nos basamos en el respeto para poder mantener
+             total agrado contigo.</p></article>
+        <article class="value-card"><span>03</span>
+          <h3>Acompañamiento</h3><p>Buscamos promover el apoyo y 
+            los valores primordiales
+            para un acompañamiento adecuado.
+          </p></article>
+      </div>
+      <section class="process-callout" id="iniciar">
+        <div><span class="eyebrow">¿NECESITAS IMFORMAR UN CASO?</span>
+          <h2>Inicia tu proceso</h2>
+          <p>Completa el formulario para iniciar el reporte. 
+             Somos una organizacion de apoyo, la informacion compartida no  
+            se envían a un servidor oficial, ni a las autoridades.</p></div>
+        <a class="button button-light" 
+        href="#proceso" data-page="proceso">
+        Empezar formulario <span>↗</span></a>
+      </section>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="page inner-page" id="page-servicios" 
+    data-panel="servicios">
+      <div class="inner-hero"><span class="eyebrow dark-eyebrow">
+        QUÉ HACEMOS</span><h1>Información sobre<br><span>nosotros.</span></h1>
+        <p>Nuestro servicios son totalmente opcionales, no buscamos reemplazar los 
+          canales oficiales ni la atención profesional.</p></div>
+
+      <div class="service-list">
+
+        <article class="service-item"><span class="service-number">01</span>
+          <div><h3>Compartir informacion</h3>
+            <p>Compartimos datos esenciales y canales de 
+              contacto aprobados para recibir información. Los cuales fueron publicados 
+              de manera voluntaria.</p></div>
+              
+            </article>
+
+        <article class="service-item"><span class="service-number">02</span>
+          <div><h3>Orientación</h3>
+            <p>Información general para dar a conozcer los pasos
+               iniciales, y pautas de ayuda en sus procesos</p>
+              
+            </article>
+
+        <article class="service-item"><span class="service-number">03</span>
+          <div><h3>Foro comunitario</h3>
+            <p>Un espacio seguro para compartir experiencias, recursos 
+              y comentarios de apoyo con el debido respeto.</p></div>
+              
+            </article>
+
+        <article class="service-item"><span class="service-number">04</span>
+          <div><h3>Directorio de ayuda</h3>
+            <p> difundir los canales de las instituciones correspondientes
+               para los debidos procesos legales.</p></div>
+             
+            </article>
+      </div>
+    </section>
+
+    <!-- FORO -->
+    <section class="page inner-page" id="page-foro" data-panel="foro">
+      <div class="inner-hero"><span class="eyebrow dark-eyebrow">NO ESTÁS A SOLAS</span><h1>Un espacio para<br><span>escucharnos.</span></h1><p>Comparte experiencias, recursos o mensajes de apoyo. Para proteger a la comunidad, las publicaciones quedan pendientes de revisión.</p></div>
+      <div class="forum-layout">
+        <form class="form-card" id="forumForm">
+          <h2>Comparte tu mensaje</h2><p class="form-intro">No incluyas direcciones, teléfonos, documentos de identidad ni acusaciones sin verificar.</p>
+          <label for="forumName">Nombre o seudónimo</label><input id="forumName" name="forumName" maxlength="50" required placeholder="¿Cómo te llamamos?">
+          <label for="forumTopic">Tema</label><select id="forumTopic" name="forumTopic" required><option value="">Selecciona un tema</option><option>Experiencia personal</option><option>Mensaje de apoyo</option><option>Recurso útil</option><option>Pregunta general</option></select>
+          <label for="forumMessage">Tu mensaje</label><textarea id="forumMessage" name="forumMessage" rows="5" maxlength="1000" required placeholder="Escribe con respeto..."></textarea>
+          <label class="check-label"><input type="checkbox" required> Confirmo que no estoy publicando datos privados ni contenido dañino.</label>
+          <button class="button button-dark" type="submit">Enviar para revisión <span>↗</span></button>
+         <p class="small-note">Los mensajes se publican después de una revisión del equipo.</p>
+             </p>
+        </form>
+        <div class="forum-feed"><div class="feed-heading"><h2>Comunidad</h2><span class="pending-pill">Publicaciones de ejemplo</span></div>
+
+<article class="forum-post"><div class="avatar avatar-lilac">J</div><div><div class="post-meta"><strong>José Luis</strong><span>Mensaje compartido</span></div><p>Cuando pasó en mi familia, lo que más me ayudó fue tener todos los datos y fotos recientes listos desde el primer momento. Se los recomiendo.</p><span class="post-tag">Experiencia personal · </span></div></article>
+
+<article class="forum-post"><div class="avatar">A</div><div><div class="post-meta"><strong>Ana Belén</strong><span>Mensaje compartido</span></div><p>Guarden copias de todos los documentos y anoten el número de cada denuncia. Les va a ahorrar tiempo en cada trámite.</p><span class="post-tag">Recurso útil · </span></div></article>
+
+<article class="forum-post"><div class="avatar avatar-lilac">D</div><div><div class="post-meta"><strong>Diego Armando</strong><span>Mensaje compartido</span></div><p>¿Alguien sabe a qué hora atienden normalmente en las oficinas de denuncias? Quisiera ir con tiempo.</p><span class="post-tag">Pregunta general · </span></div></article>
+
+<article class="forum-post"><div class="avatar">G</div><div><div class="post-meta"><strong>Gabriela y Tomás</strong><span>Mensaje compartido</span></div><p>Nos ayudó mucho hablar con otras personas que pasaron por lo mismo. Escuchar y ser escuchados alivia más de lo que parece.</p><span class="post-tag">Experiencia personal · </span></div></article>
+
+<article class="forum-post"><div class="avatar avatar-lilac">R</div><div><div class="post-meta"><strong>Rosa Elena</strong><span>Mensaje compartido</span></div><p>Recuerden que comer, dormir y pedir ayuda emocional también es parte de la búsqueda. Ustedes también importan.</p><span class="post-tag">Mensaje de apoyo · </span></div></article>
+          <div id="pendingMessages" aria-live="polite"></div>
+          <div id="approvedMessages" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULARIO DE REPORTE -->
+<section class="page inner-page" id="page-proceso" data-panel="proceso">
+
+  <div class="inner-hero">
+    <span class="eyebrow dark-eyebrow">INICIAR TU PROCESO</span>
+    <h1>Ayúdanos a registrar<br><span>la información.</span></h1>
+    <p>
+      Antes de completar este formulario, realiza el reporte por los canales
+      oficiales. Esta web no sustituye una denuncia ni activa una búsqueda.
+    </p>
+  </div>
+
+  
+  <form class="form-card report-form" id="reportForm">
+
+    <!-- 01. IDENTIFICACIÓN -->
+    <div class="form-section-heading">
+      <span>01</span>
+      <div>
+        <h2>Datos de identificación</h2>
+        <p>Registra la información personal de la persona desaparecida.</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="personName">Nombres y apellidos completos </label>
+        <input
+          id="personName"
+          name="personName"
+          type="text"
+          required
+          maxlength="120"
+          autocomplete="off"
+          placeholder="Nombres y apellidos completos">
+      </div>
+
+      <div class="field">
+        <label for="personId">Número de cédula o pasaporte</label>
+        <input
+          id="personId"
+          name="personId"
+          type="text"
+          maxlength="30"
+          autocomplete="off"
+          placeholder="Número de identificación (si lo tiene)">
+        <span class="field-help">
+          Dato opcional. Evita compartirlo públicamente.
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="personAge">Edad aproximada </label>
+        <input
+          id="personAge"
+          name="personAge"
+          type="number"
+          min="0"
+          max="120"
+          required
+          placeholder="Edad en años">
+      </div>
+
+      <div class="field">
+        <label for="birthDate">Fecha de nacimiento</label>
+        <input
+          id="birthDate"
+          name="birthDate"
+          type="date">
+      </div>
+
+    </div>
+
+    <!-- 02. DESCRIPCIÓN FÍSICA -->
+    <div class="form-section-heading">
+      <span>02</span>
+      <div>
+        <h2>Descripción física y señas particulares</h2>
+        <p>
+          Estos detalles pueden ayudar a distinguir a la persona.
+          Completa únicamente la información que conozcas.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="personHeight">Estatura aproximada</label>
+        <input
+          id="personHeight"
+          name="personHeight"
+          type="text"
+          maxlength="40"
+          placeholder="Ej. 1,65 m">
+      </div>
+
+      <div class="field">
+        <label for="personBuild">Complexión física</label>
+        <select id="personBuild" name="personBuild">
+          <option value="">Selecciona una opción</option>
+          <option value="delgada">Delgada</option>
+          <option value="media">Media</option>
+          <option value="robusta">Robusta</option>
+          <option value="otra">Otra / No determinada</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="hairColor">Color de cabello</label>
+        <input
+          id="hairColor"
+          name="hairColor"
+          type="text"
+          maxlength="60"
+          placeholder="Ej. negro, castaño, rubio">
+      </div>
+
+      <div class="field">
+        <label for="eyeColor">Color de ojos</label>
+        <input
+          id="eyeColor"
+          name="eyeColor"
+          type="text"
+          maxlength="60"
+          placeholder="Ej. café, verdes, azules">
+      </div>
+
+      <div class="field full-field">
+        <label for="distinctiveMarks">Señas particulares</label>
+        <textarea
+          id="distinctiveMarks"
+          name="distinctiveMarks"
+          rows="4"
+          maxlength="1200"
+          placeholder="Cicatrices, tatuajes, lunares, manchas, perforaciones, uso de lentes u otros rasgos identificativos."></textarea>
+      </div>
+
+      <div class="field full-field">
+        <label for="clothing">Ropa y accesorios de la última vez que fue vista</label>
+        <textarea
+          id="clothing"
+          name="clothing"
+          rows="4"
+          maxlength="1200"
+          placeholder="Describe el tipo y color de zapatos, pantalón, camiseta, chompa, gorra, mochila, accesorios u otras prendas."></textarea>
+      </div>
+
+    </div>
+
+    <!-- 03. CIRCUNSTANCIAS -->
+    <div class="form-section-heading">
+      <span>03</span>
+      <div>
+        <h2>Circunstancias de la desaparición</h2>
+        <p>
+          Registra cuándo, dónde y en qué circunstancias se tuvo el último
+          contacto con la persona.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="lastSeen">Fecha de la última vez que fue vista</label>
+        <input
+          id="lastSeen"
+          name="lastSeen"
+          type="date"
+          required>
+      </div>
+
+      <div class="field">
+        <label for="lastSeenTime">Hora aproximada</label>
+        <input
+          id="lastSeenTime"
+          name="lastSeenTime"
+          type="time">
+      </div>
+
+      <div class="field full-field">
+        <label for="lastLocation">Lugar donde fue vista o contactada por última vez </label>
+        <input
+          id="lastLocation"
+          name="lastLocation"
+          type="text"
+          required
+          maxlength="250"
+          placeholder="Ciudad, sector, calle o punto de referencia">
+        <span class="field-help">
+          Esta información es sensible. Limita su acceso y evita publicarla
+          sin autorización.
+        </span>
+      </div>
+
+      <div class="field full-field">
+        <label for="lastContact">Contexto y hechos previos a la desaparición</label>
+        <textarea
+          id="lastContact"
+          name="lastContact"
+          rows="5"
+          maxlength="2000"
+          placeholder="Describe los últimos acontecimientos conocidos, el destino al que se dirigía, el último contacto u otros datos relevantes."></textarea>
+      </div>
+
+      <div class="field full-field">
+        <label for="medicalInfo">Información médica relevante (opcional)</label>
+        <textarea
+          id="medicalInfo"
+          name="medicalInfo"
+          rows="3"
+          maxlength="1000"
+          placeholder="Incluye únicamente información que sea necesaria para la búsqueda y que estés autorizado/a a compartir."></textarea>
+        <span class="field-help">
+          La información médica es especialmente sensible. Inclúyela solo
+          si es pertinente y limita su acceso al personal autorizado.
+        </span>
+      </div>
+
+      <div class="field full-field">
+        <label for="personPhoto">Fotografía reciente de la persona</label>
+        <input
+          id="personPhoto"
+          name="personPhoto"
+          type="file"
+          accept="image/jpeg,image/png,image/webp">
+        <span class="field-help">
+          Formatos permitidos: JPG, PNG o WebP. Tamaño máximo recomendado:
+          5 MB. Utiliza una imagen clara y reciente. La carga real requiere
+          un servidor seguro.
+        </span>
+
+        <div class="photo-preview-wrap" id="photoPreviewWrap" hidden>
+          <img
+            id="photoPreview"
+            alt="Vista previa de la fotografía seleccionada">
+          <button
+            class="text-button"
+            id="removePhoto"
+            type="button">
+            Quitar foto
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 04. CONTACTO FAMILIAR -->
+    <div class="form-section-heading">
+      <span>04</span>
+      <div>
+        <h2>Contacto familiar o responsable</h2>
+        <p>
+          Estos datos deben mantenerse privados y ser accesibles únicamente
+          para las personas autorizadas.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="familyName">Nombre del contacto responsable </label>
+        <input
+          id="familyName"
+          name="familyName"
+          type="text"
+          required
+          maxlength="120"
+          autocomplete="name"
+          placeholder="Nombre completo">
+      </div>
+
+      <div class="field">
+        <label for="familyEmail">Correo electrónico </label>
+        <input
+          id="familyEmail"
+          name="familyEmail"
+          type="email"
+          required
+          maxlength="180"
+          autocomplete="email"
+          placeholder="correo@ejemplo.com">
+      </div>
+
+      <div class="field">
+        <label for="familyPhone">Teléfono de contacto </label>
+        <input
+          id="familyPhone"
+          name="familyPhone"
+          type="tel"
+          required
+          maxlength="30"
+          autocomplete="tel"
+          placeholder="Número de contacto">
+      </div>
+
+      <div class="field">
+        <label for="officialReport">¿Existe un reporte oficial?</label>
+        <select id="officialReport" name="officialReport">
+          <option value="">Selecciona una opción</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="no_sabe">No sabe</option>
+        </select>
+      </div>
+
+      <div class="field full-field">
+        <label for="extraInfo">Información adicional (opcional)</label>
+        <textarea
+          id="extraInfo"
+          name="extraInfo"
+          rows="3"
+          maxlength="1500"
+          placeholder="Añade otros datos relevantes que puedan revisarse de forma segura."></textarea>
+      </div>
+
+    </div>
+
+    <!-- 05. PRIVACIDAD -->
+    <div class="privacy-box">
+      <strong>Privacidad y consentimiento</strong>
+      <p>
+        Este formulario puede contener datos personales sensibles. Antes de
+        utilizarlo en producción, debes informar quién recopila los datos,
+        con qué finalidad se utilizarán, quién podrá consultarlos, cuánto
+        tiempo se conservarán y cómo solicitar su eliminación.
+      </p>
+      <p>
+        No publiques números de identificación, teléfonos, información
+        médica ni datos de contacto familiar sin autorización. La fotografía
+        y los demás datos deben almacenarse de forma segura.
+      </p>
+
+      <label class="check-label">
+        <input
+          type="checkbox"
+          id="consent"
+          name="consent"
+          required>
+        Confirmo que estoy autorizado/a a proporcionar esta información y
+        entiendo que este formulario de prueba no presenta una denuncia
+        oficial ni activa una búsqueda. *
+      </label>
+    </div>
+
+    <button class="button button-dark" type="submit">
+      Revisar datos de prueba <span>↗</span>
+    </button>
+
+    <p class="small-note">
+      Este formulario solo permite validar los campos en el navegador.
+      No envía información, no guarda datos en una base de datos y no
+      notifica a ninguna institución. Para recibir reportes reales se
+      necesita implementar un sistema seguro de envío y almacenamiento.
+    </p>
+
+    <div
+      class="form-result"
+      id="reportResult"
+      role="status"
+      aria-live="polite"
+      hidden>
+    </div>
+
+  </form>
+</section>
+<main>
+
+    <!-- CASOS PUBLICADOS -->
+    <section class="page inner-page" id="page-casos-publicados" data-panel="casos-publicados">
+      <div class="inner-hero"><span class="eyebrow dark-eyebrow">CASOS PUBLICADOS</span>
+        <h1>Todos los<br><span>casos.</span></h1>
+        <p>Casos compartidos de manera voluntaria. Si tienes información, comunícate con nosotros.</p></div>
+      <section class="section cases-section">
+        <div class="case-controls">
+          <label class="search-box">
+            <span>⌕</span><input id="allCaseSearch" type="search" placeholder="Buscar por nombre o ciudad" aria-label="Buscar casos">
+          </label>
+        </div>
+        <div class="case-grid" id="allCasesGrid"></div>
+        <p id="noAllCases" hidden>No hay casos para mostrar.</p>
+      </section>
+    </section>
+
+    <!-- CASOS PUBLICADOS -->
+    <section class="page inner-page" id="page-casos-publicados" data-panel="casos-publicados">
+      <div class="inner-hero"><span class="eyebrow dark-eyebrow">CASOS PUBLICADOS</span>
+        <h1>Todos los<br><span>casos.</span></h1>
+        <p>Casos compartidos de manera voluntaria. Si tienes información, comunícate con nosotros.</p></div>
+      <section class="section cases-section">
+        <div class="case-controls">
+          <label class="search-box">
+            <span>⌕</span><input id="allCaseSearch" type="search" placeholder="Buscar por nombre o ciudad" aria-label="Buscar casos">
+          </label>
+        </div>
+        <div class="case-grid" id="allCasesGrid"></div>
+        <p id="noAllCases" hidden>No hay casos para mostrar.</p>
+      </section>
+    </section>
+
+    <!-- CONTACTOS: enlaces externos se abren en otra pestaña -->
+<section class="page inner-page" id="page-contactos" data-panel="contactos">
+
+  <div class="inner-hero">
+    <span class="eyebrow dark-eyebrow">CONTACTOS Y AYUDA</span>
+    <h1>Acude a fuentes<br><span>verificadas.</span></h1>
+    <p>Encuentra orientación, apoyo emocional y canales oficiales de ayuda.</p>
+  </div>
+
+  <div class="official-grid">
+
+    <!-- FISCALÍA GENERAL DEL ESTADO -->
+    <a class="official-card"
+       href="https://www.fiscalia.gob.ec/informacion-desaparecidos/"
+       target="_blank" rel="noopener noreferrer">
+      <span class="official-icon">↗</span>
+      <small>INSTITUCIÓN OFICIAL</small>
+      <h3>Fiscalía General del Estado</h3>
+      <p>Consulta información y orientación institucional relacionada con personas desaparecidas y conoce los canales oficiales para comunicarte con la Fiscalía.</p>
+      <span class="official-link">Visitar sitio oficial ↗</span>
+    </a>
+    
+    <!-- EMERGENCIAS -->
+    <a class="official-card"
+       href="https://www.ecu911.gob.ec/"
+       target="_blank" rel="noopener noreferrer">
+      <span class="official-icon">!</span>
+      <small>EMERGENCIAS</small>
+      <h3>ECU 911</h3>
+      <p>Comunícate ante emergencias inmediatas, situaciones de peligro o crisis que requieran intervención urgente de los servicios de emergencia.</p>
+      <span class="official-link">Visitar sitio oficial ↗</span>
+    </a>
+
+    <!-- PERSONAS DESAPARECIDAS -->
+    <a class="official-card"
+       href="https://www.ministeriodegobierno.gob.ec/policia-aplicacion-desaparecidos-ecuador/"
+       target="_blank" rel="noopener noreferrer">
+      <span class="official-icon">⌕</span>
+      <small>BÚSQUEDA Y ASISTENCIA</small>
+      <h3>Alerta Desaparecidos</h3>
+      <p>Consulta la información oficial del Ministerio de Gobierno sobre la aplicación móvil destinada a apoyar la gestión de reportes de personas desaparecidas y facilitar el acceso a canales oficiales de búsqueda.</p>
+      <span class="official-link">Consultar información oficial ↗</span>
+    </a>
+
+    <!-- PORTAL DEL ESTADO -->
+    <a class="official-card"
+       href="https://www.gob.ec/"
+       target="_blank" rel="noopener noreferrer">
+      <span class="official-icon">↗</span>
+      <small>PORTAL DEL ESTADO</small>
+      <h3>Gob.ec</h3>
+      <p>Encuentra trámites, servicios públicos, información de instituciones gubernamentales y recursos oficiales disponibles en Ecuador.</p>
+      <span class="official-link">Visitar portal oficial ↗</span>
+    </a>
+
+  </div>
+
+ <!-- SECCIÓN DE CONTACTOS Y AYUDA -->
+
+<section class="support-section">
+
+  <!-- MENSAJE CENTRAL -->
+  <div class="support-heading">
+    <span class="support-heart">  </span>
+    <h2>¿Necesitas apoyo psicológico?</h2>
+    
+    <p>
+      No tienes que descuidar tu salud mental en esta situacion, 
+      busca ayuda profesional en este proceso.
+    </p>
+
+  </div>
+
+  <!-- TARJETAS DE INSTITUCIONES -->
+  <div class="official-grid">
+
+    <!-- TELECONSULTAS DE SALUD MENTAL -->
+    <a class="official-card"
+       href="https://www.quitoinforma.gob.ec/2023/09/14/ciudadanos-pueden-acceder-al-servicio-de-teleconsultas-para-casos-de-salud-mental/"
+       target="_blank"
+       rel="noopener noreferrer">
+
+      <span class="official-icon">☎</span>
+      <small>ORIENTACIÓN EMOCIONAL</small>
+      <h3>Teleconsultas de salud mental</h3>
+      <p>
+        En Quito, el servicio municipal ofrece orientación
+        y teleconsultas psicológicas gratuitas. Consulta
+        la disponibilidad, los horarios y los requisitos
+        vigentes de atención.
+      </p>
+      <span class="official-link">Consultar información ↗</span>
+
+    </a>
+
+    <!-- ORGAEPSI -->
+    <a class="official-card"
+       href="https://orgaepsi.com/"
+       target="_blank"
+       rel="noopener noreferrer">
+
+      <span class="official-icon">♡</span>
+      <small>APOYO PSICOLÓGICO</small>
+      <h3>ORGAEPSI</h3>
+      <p>
+        Consulta sus servicios de atención psicológica,
+        teleasistencia y acompañamiento emocional.
+        Revisa en su sitio web las condiciones para acceder
+        a sus programas de apoyo.
+      </p>
+      <span class="official-link">Consultar servicios ↗</span>
+
+    </a>
+
+    <!-- MINISTERIO DE SALUD PÚBLICA -->
+    <a class="official-card"
+       href="https://www.salud.gob.ec/"
+       target="_blank"
+       rel="noopener noreferrer">
+
+      <span class="official-icon">＋</span>
+      <small>SALUD PÚBLICA</small>
+      <h3>Ministerio de Salud Pública</h3>
+      <p>
+        Infórmate sobre los servicios públicos de salud
+        mental y busca orientación para recibir atención
+        psicológica en un centro de salud de tu localidad.
+      </p>
+      <span class="official-link">Visitar sitio oficial ↗</span>
+
+    </a>
+
+  </div>
+
+
+<!-- AVISO DE EMERGENCIA -->
+<div class="contact-note emergency-note">
+  <span class="emergency-icon">!</span>
+
+  <div class="emergency-content">
+    <h2>¿Estás en peligro o ante una emergencia?</h2>
+
+    <p1>
+      Comunícate con el ECU 911 si existe peligro inmediato
+      o necesitas asistencia urgente. Las líneas de orientación
+      psicológica no sustituyen los servicios de emergencia.
+    </p1>
+
+    <a href="https://www.ecu911.gob.ec/"
+       target="_blank"
+       rel="noopener noreferrer">
+      Consultar 
+      ECU 911 ↗
+    </a>
+  </div>
+</div>
+
+  </div>
+  </div>
+
+</section>
+</main>
+
+ 
+<footer class="site-footer">
+  <div class="footer-top">
+    <a class="brand footer-brand" href="#inicio" aria-label="NEXO, inicio">
+      <img
+        class="brand-logo"
+        src="img/nexo.png"
+        alt="Logo de NEXO"
+      >
+
+      <span class="brand-text">
+        NE<span class="brand-accent">XO</span>
+        <small>RED DE ACOMPAÑAMIENTO</small>
+      </span>
+    </a>
+
+    <p>Un espacio de apoyo, esperanza y respeto.</p>
+
+    <a class="back-top" href="#inicio" data-page="inicio">
+      Volver al inicio ↑
+    </a>
+  </div>
+
+  <div class="footer-bottom">
+    <span>
+      © <span id="currentYear"></span> NEXO · Estamos para apoyarte
+    </span>
+  </div>
+</footer>
+
+ 
+<!-- Botón flotante de WhatsApp -->
+<a
+  class="whatsapp-float"
+  id="whatsappLink"
+  href="https://wa.me/593963083060?text=Hola%2C%20necesito%20orientaci%C3%B3n%20sobre%20la%20plataforma%20Encontr%C3%A9monos."
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Contactar por WhatsApp"
+>
+  <span>◔</span>
+  <small>Contáctanos</small>
+</a>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>

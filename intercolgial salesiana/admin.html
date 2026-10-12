@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Moderación · NEXO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main style="max-width:760px;margin:2rem auto;padding:0 1rem">
+  <h1>Moderación del foro</h1>
+
+  <form id="loginForm">
+    <p><input id="email" type="email" placeholder="Correo" required style="width:100%;padding:.7rem"></p>
+    <p><input id="password" type="password" placeholder="Contraseña" required style="width:100%;padding:.7rem"></p>
+    <button type="submit">Entrar</button>
+    <p id="loginError" role="alert"></p>
+  </form>
+
+  <section id="panel" hidden>
+    <button id="logout" type="button">Cerrar sesión</button>
+    <h2>Pendientes de revisión (<span id="count">0</span>)</h2>
+    <div id="pending"></div>
+    <h2>Publicados</h2>
+    <div id="approved"></div>
+    <h2>Reportes recibidos (<span id="reportCount">0</span>)</h2>
+    <div id="reports"></div>
+        <h2>Casos publicados (<span id="caseCount">0</span>)</h2>
+    <button id="seedCases" type="button">Cargar los 3 casos de ejemplo</button>
+    <div id="cases"></div>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+"use strict";
+const firebaseConfig = {
+  apiKey: "AIzaSyCck5HYtygspb2fT-rT63UMKZ6GNWaKGUk",
+  authDomain: "nex0rg.firebaseapp.com",
+  databaseURL: "https://nex0rg-default-rtdb.firebaseio.com",
+  projectId: "nex0rg",
+  storageBucket: "nex0rg.firebasestorage.app",
+  messagingSenderId: "684713151482",
+  appId: "1:684713151482:web:722bb2fb9e9619e0113243"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+
+const loginForm = document.getElementById("loginForm");
+const panel = document.getElementById("panel");
+const pendingBox = document.getElementById("pending");
+const approvedBox = document.getElementById("approved");
+let listeners = [];
+
+/* Iniciar y cerrar sesión */
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    await auth.signInWithEmailAndPassword(
+      document.getElementById("email").value,
+      document.getElementById("password").value
+    );
+    document.getElementById("loginError").textContent = "";
+  } catch (error) {
+    document.getElementById("loginError").textContent = "Correo o contraseña incorrectos.";
+  }
+});
+document.getElementById("logout").addEventListener("click", () => auth.signOut());
+
+auth.onAuthStateChanged(user => {
+  loginForm.hidden = !!user;
+  panel.hidden = !user;
+  listeners.forEach(({ ref, fn }) => ref.off("value", fn));
+  listeners = [];
+  if (user) {
+    listen("foro/pendientes", renderPending);
+    listen("foro/aprobados", renderApproved);
+    listen("reportes", renderReports);
+  }
+      listen("casos", renderCasesAdmin);
+});
+
+function listen(path, render) {
+  const ref = db.ref(path);
+  const fn = ref.on("value", snap => {
+    const items = [];
+    snap.forEach(child => { items.push({ id: child.key, ...child.val() }); });
+    render(items.sort((a, b) => b.createdAt - a.createdAt));
+  }, () => alert("No tienes permiso para ver estos mensajes."));
+  listeners.push({ ref, fn });
+}
+
+/* Dibujar un mensaje con sus botones */
+function card(item, buttons) {
+  const box = document.createElement("article");
+  box.className = "forum-post";
+  const content = document.createElement("div");
+  const meta = document.createElement("div");
+  meta.className = "post-meta";
+  const author = document.createElement("strong");
+  author.textContent = item.name;
+  const date = document.createElement("span");
+  date.textContent = new Date(item.createdAt).toLocaleString("es");
+  meta.append(author, date);
+  const body = document.createElement("p");
+  body.textContent = item.message;
+  const tag = document.createElement("span");
+  tag.className = "post-tag";
+  tag.textContent = item.topic;
+  const actions = document.createElement("div");
+  buttons.forEach(([label, handler]) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = label;
+    b.style.marginRight = ".5rem";
+    b.addEventListener("click", handler);
+    actions.append(b);
+  });
+  content.append(meta, body, tag, actions);
+  box.append(content);
+  return box;
+}
+
+function renderPending(items) {
+  document.getElementById("count").textContent = items.length;
+  pendingBox.replaceChildren(...items.map(item => card(item, [
+    ["✅ Aprobar", () => approve(item)],
+    ["🗑️ Rechazar", () => reject(item)]
+  ])));
+}
+
+function renderApproved(items) {
+  approvedBox.replaceChildren(...items.map(item => card(item, [
+    ["🗑️ Eliminar", () => removeApproved(item)]
+  ])));
+}
+
+/* Reportes del formulario */
+const REPORT_LABELS = {
+  personName: "Nombre completo", personId: "Cédula o pasaporte", personAge: "Edad",
+  birthDate: "Fecha de nacimiento", personHeight: "Estatura", personBuild: "Complexión",
+  hairColor: "Color de cabello", eyeColor: "Color de ojos", distinctiveMarks: "Señas particulares",
+  clothing: "Ropa y accesorios", lastSeen: "Fecha última vez visto", lastSeenTime: "Hora aproximada",
+  lastLocation: "Último lugar", lastContact: "Contexto", medicalInfo: "Información médica",
+  familyName: "Contacto responsable", familyEmail: "Correo", familyPhone: "Teléfono",
+  officialReport: "¿Reporte oficial?", extraInfo: "Información adicional"
+};
+
+function renderReports(items) {
+  document.getElementById("reportCount").textContent = items.length;
+  document.getElementById("reports").replaceChildren(...items.map(item => {
+    const box = document.createElement("details");
+    box.style.cssText = "border:1px solid #ccc;border-radius:8px;padding:.7rem;margin-bottom:.6rem";
+    const summary = document.createElement("summary");
+    summary.textContent = `${item.personName} · ${new Date(item.createdAt).toLocaleString("es")} · ${item.estado || "nuevo"}`;
+    box.append(summary);
+
+    Object.keys(REPORT_LABELS).forEach(key => {
+      if (!item[key]) return;
+      const p = document.createElement("p");
+      const label = document.createElement("strong");
+      label.textContent = REPORT_LABELS[key] + ": ";
+      p.append(label, document.createTextNode(item[key]));
+      box.append(p);
+    });
+
+    const done = document.createElement("button");
+    done.type = "button";
+    done.textContent = "✅ Marcar como revisado";
+    done.style.marginRight = ".5rem";
+    done.addEventListener("click", () => db.ref(`reportes/${item.id}/estado`).set("revisado"));
+    const del = document.createElement("button");
+    del.type = "button";
+    del.textContent = "🗑️ Eliminar";
+    del.addEventListener("click", () => {
+      if (confirm("¿Eliminar este reporte definitivamente?")) db.ref(`reportes/${item.id}`).remove();
+    });
+       const pub = document.createElement("button");
+    pub.type = "button";
+    pub.textContent = "📢 Publicar como caso";
+    pub.style.marginRight = ".5rem";
+    pub.addEventListener("click", () => publishCase(item));
+    box.append(done, pub, del);
+
+    return box;
+  }));
+}
+
+/* Casos publicados */
+function publishCase(item) {
+  if (!confirm("¿Confirmas que existe denuncia oficial y que la familia autorizó publicar este caso?")) return;
+  const city = prompt("Ciudad / provincia que se mostrará (sin calles ni direcciones exactas):", "");
+  if (city === null) return;
+  const description = prompt("Descripción pública (ropa, sector, señas). Sin teléfonos ni cédula:", item.clothing || "");
+  if (description === null) return;
+  const photo = prompt("Foto (opcional): ruta dentro de la carpeta img, por ejemplo img/maria.png. Déjalo vacío si no hay:", "");
+  if (photo === null) return;
+
+  const data = {
+    name: item.personName,
+    age: item.personAge,
+    city: city.trim(),
+    description: description.trim(),
+    createdAt: firebase.database.ServerValue.TIMESTAMP
+  };
+  if (photo.trim()) data.photo = photo.trim();
+
+  db.ref("casos").push(data)
+    .then(() => db.ref(`reportes/${item.id}/estado`).set("publicado"))
+    .then(() => alert("Caso publicado."))
+    .catch(() => alert("No se pudo publicar el caso."));
+}
+
+function renderCasesAdmin(items) {
+  document.getElementById("caseCount").textContent = items.length;
+  document.getElementById("cases").replaceChildren(...items.map(item =>
+    card({ ...item, message: item.description, topic: item.city }, [
+      ["🗑️ Quitar caso", () => removeCase(item)]
+    ])
+  ));
+}
+
+function removeCase(item) {
+  if (confirm("¿Quitar este caso de la web?")) return db.ref(`casos/${item.id}`).remove();
+}
+
+document.getElementById("seedCases").addEventListener("click", async () => {
+  if (!confirm("¿Cargar los 3 casos de ejemplo?")) return;
+  const ejemplos = [
+    { name: "María Antonia López Zambrano", age: "28", city: "Guayaquil / Guayas", photo: "img/MUJER.png",
+      description: "La última vez que fue vista tenía unos pantalones blancos y una blusa rosada sin mangas. En el sector de la Alborada, etapa 11va." },
+    { name: "Andrés Luis Pilar Vera", age: "34", city: "Daule / Guayas", photo: "img/hombre1.png",
+      description: "La última vez que fue visto llevaba una camiseta polo roja, jeans de mezclilla y zapatos deportivos blancos. En el sector de La Aurora, La Joya." },
+    { name: "Jhon Cristofer Palma Ruiz", age: "21", city: "Guayaquil / Guayas", photo: "img/images.png",
+      description: "La última vez que lo vieron llevaba una camisa azul con corbata roja y pantalón de vestir negro. En el sector de la Juan Montalvo." }
+  ];
+  const ahora = Date.now();
+  const updates = {};
+  ejemplos.forEach((e, i) => {
+    updates[`casos/ejemplo${i + 1}`] = { ...e, status: "EJEMPLO", createdAt: ahora - i * 1000 };
+  });
+  try { await db.ref().update(updates); } catch (error) { alert("No se pudo cargar."); }
+});
+
+
+
+/* Acciones de moderación */
+function approve(item) {
+  const { id, ...data } = item;
+  return db.ref().update({
+    [`foro/aprobados/${id}`]: data,
+    [`foro/pendientes/${id}`]: null
+  });
+}
+function reject(item) {
+  if (confirm("¿Rechazar y borrar este mensaje?")) return db.ref(`foro/pendientes/${item.id}`).remove();
+}
+function removeApproved(item) {
+  if (confirm("¿Eliminar este mensaje publicado?")) return db.ref(`foro/aprobados/${item.id}`).remove();
+}
+</script>
+</body>
+</html>
